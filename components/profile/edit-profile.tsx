@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import toast from 'react-hot-toast';
-import { useProductStore } from '@/store/useEditProfileForm'
+import { useEditProfileStore } from '@/store/useEditProfileForm'
 import { LucideLoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
@@ -41,7 +41,7 @@ export function EditProfile({ initialState }: Props) {
     loading,
     error,
     updateProfile,
-  } = useProductStore(state => state)
+  } = useEditProfileStore(state => state)
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -55,10 +55,11 @@ export function EditProfile({ initialState }: Props) {
     try {
       const user = await updateProfile(data)
       const updateData = await update(user)
-      toast('Update Profile Success')
+      toast.success('Update Profile Success')
       router.push('/profile')
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
+      toast.error(error.message)
     }
   }
 

@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -8,11 +7,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
+import { useEditProfileStore } from '@/store/useEditProfileForm'
+import { LucideLoaderCircle } from 'lucide-react'
 
 // Define the schema for password reset
-const passwordResetSchema = z.object({
-  oldPassword: z.string().min(1, 'Old password is required'),
+export const passwordResetSchema = z.object({
+  id: z.string(),
   password: z.string()
     .min(8, 'Password must be at least 8 characters')
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
@@ -24,53 +26,45 @@ const passwordResetSchema = z.object({
   path: ["confirmPassword"],
 })
 
-type PasswordResetForm = z.infer<typeof passwordResetSchema>
+export type PasswordResetForm = z.infer<typeof passwordResetSchema>
 
-export function PasswordResetForm() {
-  const [isSuccess, setIsSuccess] = useState(false)
+type Props = {
+  initialState: PasswordResetForm,
+}
+
+export function PasswordResetForm({ initialState }: Props) {
+  const router = useRouter()
+  const {
+    loading,
+    error,
+    resetPassword,
+  } = useEditProfileStore(state => state)
   const { register, handleSubmit, formState: { errors } } = useForm<PasswordResetForm>({
-    resolver: zodResolver(passwordResetSchema)
+    resolver: zodResolver(passwordResetSchema),
+    defaultValues: initialState
   })
 
   const onSubmit = async (data: PasswordResetForm) => {
-    // Here you would typically call an API to reset the password
-    console.log('Password reset data:', data)
-    // Simulating an API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsSuccess(true)
-  }
+    try {
+      const res = await resetPassword(data)
+      toast.success('Update Password Success')
+      router.push('/profile')
+    } catch (error: any) {
+      console.error(error)
+      toast.error(error.message)
+    }
 
-  if (isSuccess) {
-    return (
-      <Alert>
-        <AlertDescription>
-          Your password has been successfully reset.
-        </AlertDescription>
-      </Alert>
-    )
   }
 
   return (
-    <Card className="w-[350px] h-[480px]">
+    <Card className="w-[350px] h-[360px]">
       <CardHeader>
         <CardTitle>Reset Password</CardTitle>
         <CardDescription>Enter your new password below.</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent>
-          <div className='text-center pb-4'>TODO:</div>
           <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="password">Old Password</Label>
-              <Input 
-                id="oldPassword" 
-                type="password"
-                {...register('password')}
-              />
-              {errors.oldPassword && (
-                <p className="text-sm text-red-500">{errors.oldPassword.message}</p>
-              )}
-            </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="password">New Password</Label>
               <Input 
@@ -96,7 +90,9 @@ export function PasswordResetForm() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full">Reset Password</Button>
+          <Button disabled={loading} type="submit" className="w-full">
+            {loading && <LucideLoaderCircle className='w-4 h-4 mr-2' />}Reset Password
+          </Button>
         </CardFooter>
       </form>
     </Card>
