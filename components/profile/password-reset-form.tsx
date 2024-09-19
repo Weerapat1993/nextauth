@@ -48,7 +48,7 @@ export function PasswordResetForm({ initialState }: Props) {
     try {
       const res = await resetPassword(data)
       toast.success('Update Password Success')
-      router.push('/profile')
+      router.push('/auth/profile')
     } catch (error: any) {
       console.error(error)
       toast.error(error.message)
@@ -57,7 +57,7 @@ export function PasswordResetForm({ initialState }: Props) {
   }
 
   return (
-    <Card className="w-[350px] h-[360px]">
+    <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Reset Password</CardTitle>
         <CardDescription>Enter your new password below.</CardDescription>

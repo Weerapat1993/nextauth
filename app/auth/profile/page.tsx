@@ -39,11 +39,17 @@ export default async function ProfilePage() {
               </div>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link href="/profile/edit">
+              <Link href="/auth/profile/edit">
                 <Button>Edit</Button>
               </Link>
-              <Link href="/profile/reset-password">
+              <Link href="/auth/reset-password">
                 <Button>Reset Password</Button>
+              </Link>
+              <Link href="/auth/magic-link">
+                <Button>Magic Link</Button>
+              </Link>
+              <Link href="/auth/phone-verification">
+                <Button>Phone Verification</Button>
               </Link>
             </div>
           </div>

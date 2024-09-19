@@ -12,29 +12,18 @@ import { LucideLoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
-const profileSchema = z.object({
+const magicLinkSchema = z.object({
   id: z.string().min(1, {
     message: "ID required.",
-  }),
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
   }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
 })
 
-type ProfileFormValues = z.infer<typeof profileSchema>
+type MagicLinkFormValues = z.infer<typeof magicLinkSchema>
 
-type Props = {
-  initialState: {
-    id: string
-    name: string
-    email: string
-  }
-}
-
-export function EditProfile({ initialState }: Props) {
+export function MagicLinkForm() {
   const router = useRouter()
   const { data, update } = useSession({ required: true });
   const {
@@ -42,21 +31,16 @@ export function EditProfile({ initialState }: Props) {
     error,
     updateProfile,
   } = useEditProfileStore(state => state)
-  const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileSchema),
-    defaultValues: {
-      id: initialState.id,
-      name: initialState.name,
-      email: initialState.email,
-    },
+  const form = useForm<MagicLinkFormValues>({
+    resolver: zodResolver(magicLinkSchema),
   })
 
-  async function onSubmit(data: ProfileFormValues) {
+  async function onSubmit(data: MagicLinkFormValues) {
     try {
-      const user = await updateProfile(data)
-      const updateData = await update(user)
-      toast.success('Update Profile Success')
-      router.push('/auth/profile')
+      // const user = await updateProfile(data)
+      // const updateData = await update(user)
+      toast.success('Update Magic Link Success')
+      // router.push('/profile')
     } catch (error: any) {
       console.error(error)
       toast.error(error.message)
@@ -66,19 +50,6 @@ export function EditProfile({ initialState }: Props) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Your name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="email"
@@ -93,7 +64,7 @@ export function EditProfile({ initialState }: Props) {
           )}
         />
         <Button disabled={loading} type="submit">
-          {loading && <LucideLoaderCircle className='w-4 h-4 mr-2' />}Update profile
+          {loading && <LucideLoaderCircle className='w-4 h-4 mr-2' />}Send Magic Link
         </Button>
       </form>
     </Form>
