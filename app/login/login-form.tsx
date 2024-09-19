@@ -9,8 +9,6 @@ import toast from 'react-hot-toast';
 import { signIn } from 'next-auth/react';
 import { LoginUserInput, loginUserSchema } from '@/lib/user-schema';
 
-
-
 export const LoginForm = () => {
   const router = useRouter();
   const [error, setError] = useState('');

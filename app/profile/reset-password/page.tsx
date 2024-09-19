@@ -1,7 +1,7 @@
+import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 import { auth } from "@/auth";
 import Header from "@/components/header";
-import { EditProfile } from "@/components/profile/edit-profile";
-import { PasswordResetForm } from "@/components/profile/password-reset-form";
+// import { PasswordResetForm } from "@/components/profile/password-reset-form";
 import { redirect } from "next/navigation";
 
 export default async function ProfileEditPage() {
@@ -16,7 +16,10 @@ export default async function ProfileEditPage() {
     <>
       <Header />
       <section className="bg-ct-blue-600 min-h-screen pt-20 flex justify-center">
-        <PasswordResetForm />
+        <div className="max-w-2xl mx-auto p-6 bg-ct-dark-100 rounded-md h-[20rem]">
+          <ResetPasswordForm />
+          {/* <PasswordResetForm /> */}
+        </div>
       </section>
     </>
   );
