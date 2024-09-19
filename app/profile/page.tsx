@@ -1,14 +1,16 @@
 import { auth } from "@/auth";
 import Header from "@/components/header";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function ProfilePage() {
   const session = await auth();
 
-  // if (!session?.user) {
-  //   return redirect("/api/auth/signin");
-  // }
+  if (!session?.user) {
+    return redirect("/login");
+  }
 
   const user = session?.user;
 
@@ -35,6 +37,14 @@ export default async function ProfilePage() {
                 <p className="mb-3">Name: {user?.name}</p>
                 <p className="mb-3">Email: {user?.email}</p>
               </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Link href="/profile/edit">
+                <Button>Edit</Button>
+              </Link>
+              <Link href="/profile/reset-password">
+                <Button>Reset Password</Button>
+              </Link>
             </div>
           </div>
         </div>
