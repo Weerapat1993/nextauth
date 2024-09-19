@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { toast } from '@/components/ui/use-toast'
+import { useToast } from "@/hooks/use-toast"
 import Link from 'next/link'
 
 const formSchema = z.object({
@@ -32,7 +32,8 @@ const formSchema = z.object({
   path: ["confirmPassword"],
 })
 
-export function RegisterPageComponent() {
+export function RegisterPage() {
+  const { toast } = useToast()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -116,7 +117,7 @@ export function RegisterPageComponent() {
       </Form>
       <p className="mt-4 text-center text-sm">
         Already have an account?{' '}
-        <Link href="/login" className="text-primary hover:underline">
+        <Link href="/auth/signin" className="text-primary hover:underline">
           Login here
         </Link>
       </p>

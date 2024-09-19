@@ -1,10 +1,8 @@
-import SignInForm from '@/components/auth/SignInForm';
+import { LoginPage } from '@/components/auth/login-page';
 
 const SignInPage = () => {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <SignInForm />
-    </div>
+    <LoginPage />
   );
 };
 

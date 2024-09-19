@@ -1,10 +1,8 @@
-import SignUpForm from "@/components/auth/SignUpForm";
+import { RegisterPage } from "@/components/auth/register-page";
 
 const SignUpPage = () => {
   return (
-    <div className="flex items-center justify-center h-screen">
-      <SignUpForm />
-    </div>
+    <RegisterPage />
   );
 };
 

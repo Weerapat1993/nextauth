@@ -18,3 +18,7 @@ export const getSessions = async () => {
 export const revokeSession = async (sessionId: string) => {
   await api.post('/account/revoke-session', { sessionId });
 };
+
+export const findUserByEmail = async (email: string) => {
+  await api.get(`/account/user/${email}`);
+};
